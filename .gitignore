@@ -1,1 +1,3 @@
 /viikko1/NhlStatistics1/.nb-gradle/
+*/build
+*/.gradle
