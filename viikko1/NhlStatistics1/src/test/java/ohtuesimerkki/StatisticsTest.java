@@ -26,6 +26,7 @@ public class StatisticsTest {
     Statistics stats;
     Player testiPelaaja;
     ArrayList<Player> testiPelaajat;
+    ArrayList<Player> testiPelaajat2;
 
     @Before
     public void setUp(){
@@ -36,6 +37,9 @@ public class StatisticsTest {
         testiPelaajat.add(new Player("Semenko", "EDM", 4, 12));
         testiPelaajat.add(new Player("Kurri", "EDM", 37, 53));
         testiPelaajat.add(new Player("Gretzky", "EDM", 35, 89));
+        testiPelaajat2 = new ArrayList<>();
+        testiPelaajat2.add(new Player("Gretzky", "EDM", 35, 89));
+        testiPelaajat2.add(new Player("Lemieux", "PIT", 45, 54));
     }  
     
     
@@ -45,13 +49,18 @@ public class StatisticsTest {
     }
 
     @Test
-    public void searchTestVirheellisellaSyotteellaPalauttaaNull() {
+    public void searchVirheellisellaSyotteellaPalauttaaNull() {
         assertEquals(null, stats.search("pekka"));
     }    
     
     @Test
     public void teamTest() {
         assertEquals(testiPelaajat.toString(), stats.team("EDM").toString());
+    }
+    
+    @Test
+    public void topScorersTest() {
+        assertEquals(testiPelaajat2.toString(), stats.topScorers(1).toString());
     }
 
 }
