@@ -18,7 +18,7 @@ public class KauppaTest {
 
         viite = mock(Viitegeneraattori.class);
 
-        when(viite.uusi()).thenReturn(42);
+        when(viite.uusi()).thenReturn(42).thenReturn(43).thenReturn(44);
 
         varasto = mock(Varasto.class);
 
@@ -76,13 +76,60 @@ public class KauppaTest {
 
         verify(pankki).tilisiirto("pekka", 42, "12345", "33333-44455", 10);
     }
-    
+
     @Test
     public void ostoksenPaaytyttyaPankinMetodiaTilisiirtoKutsutaanOikeillaArvoillaLoppuneellaTuotteella() {
 
         k.aloitaAsiointi();
         k.lisaaKoriin(1);
         k.lisaaKoriin(3);
+        k.tilimaksu("pekka", "12345");
+
+        verify(pankki).tilisiirto("pekka", 42, "12345", "33333-44455", 5);
+    }
+
+    @Test
+    public void aloitaAsiointiNollaaHinnan() {
+
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.tilimaksu("pekka", "12345");
+
+        verify(pankki).tilisiirto("pekka", 42, "12345", "33333-44455", 5);
+    }
+
+    @Test
+    public void KutsutaanAinaUuttaViitenumeroa() {
+
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.tilimaksu("pekka", "12345");
+
+        verify(pankki).tilisiirto("pekka", 42, "12345", "33333-44455", 5);
+
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.tilimaksu("pekka", "12345");
+
+        verify(pankki).tilisiirto("pekka", 43, "12345", "33333-44455", 5);
+
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.tilimaksu("pekka", "12345");
+
+        verify(pankki).tilisiirto("pekka", 44, "12345", "33333-44455", 5);
+    }
+    
+    @Test
+    public void koristaPoistaminenToimii() {
+
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.lisaaKoriin(2);
+        k.poistaKorista(2);
         k.tilimaksu("pekka", "12345");
 
         verify(pankki).tilisiirto("pekka", 42, "12345", "33333-44455", 5);
